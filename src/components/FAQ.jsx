@@ -16,7 +16,7 @@ const FAQ = () => {
     { question: "Pergunta 1?", answer: "" },
   ];
 
-  const toggleItem = (index: number) => {
+  const toggleItem = (index) => {
     setOpenItem(openItem === index ? -1 : index);
   };
 
