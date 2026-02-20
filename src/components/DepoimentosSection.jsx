@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { motion, useAnimation } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
 
@@ -8,6 +9,35 @@ import "swiper/css";
 import "swiper/css/pagination";
 
 const DepoimentosSection = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const controls = useAnimation();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          controls.start("visible");
+        } else {
+          setIsVisible(false);
+          controls.start("hidden");
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const element = document.getElementById("depoimentos-section");
+    if (element) {
+      observer.observe(element);
+    }
+
+    return () => {
+      if (element) {
+        observer.unobserve(element);
+      }
+    };
+  }, [controls]);
+
   const depoimentos = [
     {
       titulo: "Lorem ipsum dolor",
@@ -33,22 +63,59 @@ const DepoimentosSection = () => {
   ];
 
   return (
-    <section className="w-full px-2 md:px-12 lg:px-24 py-20 md:py-28">
+    <section id="depoimentos-section" className="w-full px-2 md:px-12 lg:px-24 py-20 md:py-28">
       <div className="max-w-[1400px] mx-auto flex flex-col items-center gap-12">
 
         {/* TITLE */}
-        <h2 className="text-center font-['Power_Grotesk'] leading-tight">
-          <span className="text-black font-light text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+        <motion.h2 
+          className="text-center font-['Power_Grotesk'] leading-tight"
+          variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: { opacity: 1, y: 0 }
+          }}
+          initial="hidden"
+          animate={controls}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <motion.span 
+            className="text-black font-light text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 }
+            }}
+            initial="hidden"
+            animate={controls}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
             como é{" "}
-          </span>
-          <span className="text-black font-medium text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+          </motion.span>
+          <motion.span 
+            className="text-black font-medium text-4xl sm:text-5xl md:text-6xl lg:text-7xl"
+            variants={{
+              hidden: { opacity: 0 },
+              visible: { opacity: 1 }
+            }}
+            initial="hidden"
+            animate={controls}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
             trabalhar <br className="hidden sm:block" />
             com a gente?
-          </span>
-        </h2>
+          </motion.span>
+        </motion.h2>
 
         {/* CAROUSEL */}
-        <div style={{ maxWidth: "92.5vw" }} className="flex items-center justify-center h-[420px] w-full">
+        <motion.div 
+          style={{ maxWidth: "92.5vw" }} 
+          className="flex items-center justify-center h-[420px] w-full"
+          variants={{
+            hidden: { opacity: 0, scale: 0.95 },
+            visible: { opacity: 1, scale: 1 }
+          }}
+          initial="hidden"
+          animate={controls}
+          transition={{ duration: 0.8, delay: 0.3 }}
+        >
           <Swiper
             modules={[Pagination, Autoplay]}
             spaceBetween={50}
@@ -84,39 +151,109 @@ const DepoimentosSection = () => {
                 justifyContent: "center",
               }}
             >
-              <div className="bg-neutral-200 rounded-2xl p-8 md:p-10 h-full flex flex-col justify-between min-h-[420px] w-80 sm:w-96">
+              <motion.div 
+                className="bg-neutral-200 rounded-2xl p-8 md:p-10 h-full flex flex-col justify-between min-h-[420px] w-80 sm:w-96"
+                variants={{
+                  hidden: { opacity: 0, y: 30, scale: 0.9 },
+                  visible: { opacity: 1, y: 0, scale: 1 }
+                }}
+                initial="hidden"
+                animate={controls}
+                transition={{ duration: 0.6, delay: 0.4 + (index * 0.1) }}
+              >
 
                 {/* CONTENT */}
-                <div className="space-y-6">
-                  <h3 className="text-blue-600 font-['Power_Grotesk'] font-light
-                    text-2xl sm:text-3xl md:text-4xl leading-tight">
+                <motion.div 
+                  className="space-y-6"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1 }
+                  }}
+                  initial="hidden"
+                  animate={controls}
+                  transition={{ duration: 0.6, delay: 0.5 + (index * 0.1) }}
+                >
+                  <motion.h3 
+                    className="text-blue-600 font-['Power_Grotesk'] font-light text-2xl sm:text-3xl md:text-4xl leading-tight"
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: { opacity: 1, y: 0 }
+                    }}
+                    initial="hidden"
+                    animate={controls}
+                    transition={{ duration: 0.4, delay: 0.6 + (index * 0.1) }}
+                  >
                     {depoimento.titulo}
-                  </h3>
+                  </motion.h3>
 
-                  <p className="text-black/70 font-['Inter'] font-light
-                    text-base sm:text-lg leading-relaxed">
+                  <motion.p 
+                    className="text-black/70 font-['Inter'] font-light text-base sm:text-lg leading-relaxed"
+                    variants={{
+                      hidden: { opacity: 0, y: 20 },
+                      visible: { opacity: 1, y: 0 }
+                    }}
+                    initial="hidden"
+                    animate={controls}
+                    transition={{ duration: 0.4, delay: 0.7 + (index * 0.1) }}
+                  >
                     {depoimento.texto}
-                  </p>
-                </div>
+                  </motion.p>
+                </motion.div>
 
                 {/* FOOTER */}
-                <div className="flex items-center justify-between mt-10">
+                <motion.div 
+                  className="flex items-center justify-between mt-10"
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 }
+                  }}
+                  initial="hidden"
+                  animate={controls}
+                  transition={{ duration: 0.4, delay: 0.8 + (index * 0.1) }}
+                >
                   <div>
-                    <p className="text-black/70 font-semibold text-base sm:text-lg">
+                    <motion.p 
+                      className="text-black/70 font-semibold text-base sm:text-lg"
+                      variants={{
+                        hidden: { opacity: 0 },
+                        visible: { opacity: 1 }
+                      }}
+                      initial="hidden"
+                      animate={controls}
+                      transition={{ duration: 0.3, delay: 0.9 + (index * 0.1) }}
+                    >
                       {depoimento.nome}
-                    </p>
-                    <p className="text-black/60 text-sm sm:text-base">
+                    </motion.p>
+                    <motion.p 
+                      className="text-black/60 text-sm sm:text-base"
+                      variants={{
+                        hidden: { opacity: 0 },
+                        visible: { opacity: 1 }
+                      }}
+                      initial="hidden"
+                      animate={controls}
+                      transition={{ duration: 0.3, delay: 1.0 + (index * 0.1) }}
+                    >
                       {depoimento.cargo}
-                    </p>
+                    </motion.p>
                   </div>
 
-                  <div className="w-14 h-14 rounded-full bg-stone-900" />
-                </div>
-              </div>
+                  <motion.div 
+                    className="w-14 h-14 rounded-full bg-stone-900"
+                    variants={{
+                      hidden: { opacity: 0, scale: 0.8 },
+                      visible: { opacity: 1, scale: 1 }
+                    }}
+                    initial="hidden"
+                    animate={controls}
+                    transition={{ duration: 0.3, delay: 1.1 + (index * 0.1) }}
+                  />
+                </motion.div>
+              </motion.div>
             </SwiperSlide>
           ))}
         </Swiper>
-        </div>
+        </motion.div>
         
         <style jsx>{`
           :global(.swiper-pagination) {

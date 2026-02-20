@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import MarcasImpactantes from './components/MarcasImpactantes';
 import MotivosIdentidade from './components/MotivosIdentidade';
@@ -13,27 +14,28 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <main className="bg-white inline-flex flex-col justify-start items-center overflow-hidden">
-      <Navigation />
-      <HeroSection />
-      <MotivosIdentidade />
-      <Portfolio />
-      <SobreSection />
-      <DepoimentosSection />
-      <Pacotes />
-      <WebsiteSection />
-      <FAQ /> 
-      {/* 
-      */}
-      <Footer />
-      {
-      /* 
-        */
-      }
-      {/* 
-      <MarcasImpactantes />
-      */}
-    </main>
+    <Router>
+      <div className="bg-white inline-flex flex-col justify-start items-center overflow-hidden min-h-screen">
+        <Navigation />
+        
+        <Routes>
+          <Route path="/" element={
+            <>
+              <HeroSection />
+              <MotivosIdentidade />
+              <Portfolio />
+              <SobreSection />
+              <DepoimentosSection />
+              <Pacotes />
+              <WebsiteSection />
+              <FAQ />
+            </>
+          } />
+        </Routes>
+        
+        <Footer />
+      </div>
+    </Router>
   );
 }
 

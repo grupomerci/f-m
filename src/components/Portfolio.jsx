@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { motion, useAnimation } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 
@@ -48,27 +49,117 @@ const items = [
 ];
 
 export default function Portfolio() {
+  const [isVisible, setIsVisible] = useState(false);
+  const controls = useAnimation();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          controls.start("visible");
+        } else {
+          setIsVisible(false);
+          controls.start("hidden");
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const element = document.getElementById("portfolio-section");
+    if (element) {
+      observer.observe(element);
+    }
+
+    return () => {
+      if (element) {
+        observer.unobserve(element);
+      }
+    };
+  }, [controls]);
+
   return (
-    <section className="w-full bg-black py-24 overflow-hidden">
+    <section id="portfolio-section" className="w-full bg-black py-24 overflow-hidden">
       {/* CONTAINER */}
       <div className="max-w-[1728px] mx-auto px-2 flex flex-col gap-16">
         {/* TITLE */}
-        <div className="text-center">
+        <motion.div 
+          className="text-center"
+          variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: { opacity: 1, y: 0 }
+          }}
+          initial="hidden"
+          animate={controls}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
           <h2
             className="text-white font-['Power_Grotesk'] text-3xl md:text-5xl"
             style={{ lineHeight: "1.5" }}
           >
-            <span className="max-md:hidden">confira essas </span>identidades visuais
+            <motion.span 
+              className="max-md:hidden"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1 }
+              }}
+              initial="hidden"
+              animate={controls}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              confira essas 
+            </motion.span>
+            <motion.span 
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1 }
+              }}
+              initial="hidden"
+              animate={controls}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              identidades visuais
+            </motion.span>
             <br />
-            <span className="text-6xl max-md:text-4xl max-sm:text-3xl">feitas pela </span>
-            <span className="font-medium bg-white rounded-lg text-blue-600 px-2 pt-1 text-6xl max-md:text-4xl max-sm:text-3xl max-md:bg-transparent max-md:px-0 max-md:text-white">
+            <motion.span 
+              className="text-6xl max-md:text-4xl max-sm:text-3xl"
+              variants={{
+                hidden: { opacity: 0 },
+                visible: { opacity: 1 }
+              }}
+              initial="hidden"
+              animate={controls}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            >
+              feitas pela 
+            </motion.span>
+            <motion.span 
+              className="font-medium bg-white rounded-lg text-blue-600 px-2 pt-1 text-6xl max-md:text-4xl max-sm:text-3xl max-md:bg-transparent max-md:px-0 max-md:text-white"
+              variants={{
+                hidden: { opacity: 0, scale: 0.8 },
+                visible: { opacity: 1, scale: 1 }
+              }}
+              initial="hidden"
+              animate={controls}
+              transition={{ duration: 0.4, delay: 0.4 }}
+            >
               f&m works
-            </span>
+            </motion.span>
           </h2>
-        </div>
+        </motion.div>
 
         {/* CAROUSEL */}
-        <div style={{ maxWidth: "92.5vw" }} className="flex mx-auto items-center justify-center h-[620px] max-md:h-[460px] w-full">
+        <motion.div 
+          style={{ maxWidth: "92.5vw" }} 
+          className="flex mx-auto items-center justify-center h-[620px] max-md:h-[460px] w-full"
+          variants={{
+            hidden: { opacity: 0, scale: 0.95 },
+            visible: { opacity: 1, scale: 1 }
+          }}
+          initial="hidden"
+          animate={controls}
+          transition={{ duration: 0.8, delay: 0.5 }}
+        >
           <Swiper
             modules={[Navigation, Pagination]}
             spaceBetween={50}
@@ -85,7 +176,7 @@ export default function Portfolio() {
               768: { spaceBetween: 50 }
             }}
           >
-            {items.map((item) => (
+            {items.map((item, index) => (
               <SwiperSlide
                 key={item.id}
                 className="!w-auto !flex items-center justify-center"
@@ -95,19 +186,33 @@ export default function Portfolio() {
                   justifyContent: "center",
                 }}
               >
-                <div
+                <motion.div
                   className={`${item.width} ${item.height} rounded-3xl overflow-hidden`}
+                  variants={{
+                    hidden: { opacity: 0, y: 30, scale: 0.8 },
+                    visible: { opacity: 1, y: 0, scale: 1 }
+                  }}
+                  initial="hidden"
+                  animate={controls}
+                  transition={{ duration: 0.6, delay: 0.6 + (index * 0.08) }}
                 >
-                  <img
+                  <motion.img
                     src={item.src}
                     alt="portfolio"
-                    className="w-full h-full  rounded-3xl"
+                    className="w-full h-full rounded-3xl"
+                    variants={{
+                      hidden: { opacity: 0, scale: 1.1 },
+                      visible: { opacity: 1, scale: 1 }
+                    }}
+                    initial="hidden"
+                    animate={controls}
+                    transition={{ duration: 0.4, delay: 0.7 + (index * 0.08) }}
                   />
-                </div>
+                </motion.div>
               </SwiperSlide>
             ))}
           </Swiper>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

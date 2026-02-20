@@ -1,9 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { motion, useAnimation } from "framer-motion";
 
 const WebsiteSection = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const controls = useAnimation();
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          controls.start("visible");
+        } else {
+          setIsVisible(false);
+          controls.start("hidden");
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    const element = document.getElementById("website-section");
+    if (element) {
+      observer.observe(element);
+    }
+
+    return () => {
+      if (element) {
+        observer.unobserve(element);
+      }
+    };
+  }, [controls]);
+
   return (
-    <section className="w-full bg-black py-20 px-4 md:py-28 flex justify-center">
-      <div
+    <section id="website-section" className="w-full bg-black py-20 px-4 md:py-28 flex justify-center">
+      <motion.div
         className="
         w-full max-w-[1200px]
         bg-white
@@ -11,9 +41,16 @@ const WebsiteSection = () => {
         overflow-hidden
         flex flex-col lg:flex-row
       "
+        variants={{
+          hidden: { opacity: 0, scale: 0.95, borderRadius: "0px" },
+          visible: { opacity: 1, scale: 1, borderRadius: "16px" }
+        }}
+        initial="hidden"
+        animate={controls}
+        transition={{ duration: 0.8, ease: "easeOut" }}
       >
         {/* IMAGEM */}
-        <div
+        <motion.div
           className="
           relative
           h-[260px] sm:h-[320px] md:h-[380px] lg:h-auto
@@ -21,8 +58,15 @@ const WebsiteSection = () => {
           overflow-hidden
           flex items-center justify-center
         "
+          variants={{
+            hidden: { opacity: 0, x: -50, rotate: 0 },
+            visible: { opacity: 1, x: 0, rotate: -6 }
+          }}
+          initial="hidden"
+          animate={controls}
+          transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <img
+          <motion.img
             src="/website/64 1.png"
             alt="Website"
             className="
@@ -33,11 +77,18 @@ const WebsiteSection = () => {
               lg:-top-14
               lg:-left-10
             "
+            variants={{
+              hidden: { opacity: 0, scale: 0.8, y: 30 },
+              visible: { opacity: 1, scale: 1, y: 0 }
+            }}
+            initial="hidden"
+            animate={controls}
+            transition={{ duration: 0.6, delay: 0.3 }}
           />
-        </div>
+        </motion.div>
 
         {/* TEXTO */}
-        <div
+        <motion.div
           className="
           flex-1
           px-6 sm:px-8 md:px-12 lg:px-16
@@ -45,8 +96,15 @@ const WebsiteSection = () => {
           flex flex-col justify-center
           gap-5
         "
+          variants={{
+            hidden: { opacity: 0, x: 50 },
+            visible: { opacity: 1, x: 0 }
+          }}
+          initial="hidden"
+          animate={controls}
+          transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <h2
+          <motion.h2
             className="
             text-black
             font-['Power_Grotesk']
@@ -54,12 +112,19 @@ const WebsiteSection = () => {
             leading-tight
             text-3xl sm:text-4xl md:text-5xl
           "
+            variants={{
+              hidden: { opacity: 0, y: 30 },
+              visible: { opacity: 1, y: 0 }
+            }}
+            initial="hidden"
+            animate={controls}
+            transition={{ duration: 0.6, delay: 0.5 }}
           >
             Você também precisa de <br className="hidden sm:block" />
             um Website?
-          </h2>
+          </motion.h2>
 
-          <p
+          <motion.p
             className="
             text-black/70
             font-['Inter']
@@ -68,12 +133,19 @@ const WebsiteSection = () => {
             text-base sm:text-lg
             max-w-[520px]
           "
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0 }
+            }}
+            initial="hidden"
+            animate={controls}
+            transition={{ duration: 0.6, delay: 0.6 }}
           >
             Tenha também uma marca bem aplicada no território digital. Alavanque
             seu poder de interação com seus clientes através de um website.
-          </p>
+          </motion.p>
 
-          <button
+          <motion.button
             className="
             w-fit
             px-6 py-3
@@ -83,11 +155,20 @@ const WebsiteSection = () => {
             hover:bg-blue-700
             transition
           "
+            variants={{
+              hidden: { opacity: 0, y: 20, scale: 0.8 },
+              visible: { opacity: 1, y: 0, scale: 1 }
+            }}
+            initial="hidden"
+            animate={controls}
+            transition={{ duration: 0.4, delay: 0.7 }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             Botão
-          </button>
-        </div>
-      </div>
+          </motion.button>
+        </motion.div>
+      </motion.div>
     </section>
   );
 };
